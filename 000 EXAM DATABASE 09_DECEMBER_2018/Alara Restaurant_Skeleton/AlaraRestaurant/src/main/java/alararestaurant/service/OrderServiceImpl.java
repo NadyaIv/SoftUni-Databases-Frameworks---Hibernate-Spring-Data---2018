@@ -1,8 +1,8 @@
 package alararestaurant.service;
 
-import alararestaurant.domain.dtos.orders.OrderImportRootDto;
-import alararestaurant.domain.dtos.orders.OrderImprotDto;
-import alararestaurant.domain.dtos.orders.OrderItemsImportDto;
+import alararestaurant.domain.dtos.orders.OrderRootDto;
+import alararestaurant.domain.dtos.orders.OrderDto;
+import alararestaurant.domain.dtos.orders.OrderItemDto;
 import alararestaurant.domain.entities.Employee;
 import alararestaurant.domain.entities.Item;
 import alararestaurant.domain.entities.Order;
@@ -61,8 +61,8 @@ public class OrderServiceImpl implements OrderService {
     public String importOrders() throws JAXBException {
        StringBuilder sb= new StringBuilder();
        boolean isHaveItem=true;
-        OrderImportRootDto orderItemsImportRootDto=this.xmlParser.parseXml(OrderImportRootDto.class,FILE_PATH_ORDERS);
-        for (OrderImprotDto orderImprotDto : orderItemsImportRootDto.getOrderImprotDtos()) {
+        OrderRootDto orderItemsImportRootDto=this.xmlParser.parseXml(OrderRootDto.class,FILE_PATH_ORDERS);
+        for (OrderDto orderImprotDto : orderItemsImportRootDto.getOrderImprotDtos()) {
             if(!this.validationUtil.isValid(orderImprotDto)){
                 sb.append("Invalid data format.").append(System.lineSeparator());
                 continue;
@@ -74,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
                 continue;
             }
             order.setEmployee(employee);
-            for (OrderItemsImportDto itemImportDtoOrder : orderImprotDto.getOrderItemsImportRootDto().getItemImportDtoOrders()) {
+            for (OrderItemDto itemImportDtoOrder : orderImprotDto.getOrderItemsImportRootDto().getItemImportDtoOrders()) {
                 Item item=this.itemRepository.findByName(itemImportDtoOrder.getName()).orElse(null);
                 if(item==null){
                     isHaveItem=false;
@@ -84,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
             List<OrderItem> orderItemList=new ArrayList<>();
             if(isHaveItem){
                 this.orderRepository.saveAndFlush(order);
-                for (OrderItemsImportDto itemImportDtoOrder : orderImprotDto.getOrderItemsImportRootDto().getItemImportDtoOrders()) {
+                for (OrderItemDto itemImportDtoOrder : orderImprotDto.getOrderItemsImportRootDto().getItemImportDtoOrders()) {
                     Item item=this.itemRepository.findByName(itemImportDtoOrder.getName()).orElse(null);
                   OrderItem orderItem=new OrderItem();
                   orderItem.setQuantity(itemImportDtoOrder.getQuantity());

@@ -30,7 +30,7 @@ public class OrderDto {
    @XmlElement(name="type")
     private String type;
    @XmlElement(name="items")
-    private OrderItemRootDto orderItemsImportRootDto;
+    private OrderItemRDto orderItemsImportRootDto;
 
     public OrderDto() {
 
@@ -72,11 +72,11 @@ public class OrderDto {
         this.type = type;
     }
 
-    public OrderItemRootDto getOrderItemsImportRootDto() {
+    public OrderItemRDto getOrderItemsImportRootDto() {
         return this.orderItemsImportRootDto;
     }
 
-    public void setOrderItemsImportRootDto(OrderItemRootDto orderItemsImportRootDto) {
+    public void setOrderItemsImportRootDto(OrderItemRDto orderItemsImportRootDto) {
         this.orderItemsImportRootDto = orderItemsImportRootDto;
     }
 }
